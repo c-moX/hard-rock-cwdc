@@ -2,7 +2,7 @@
 // Step: 01 OR 02
 const searchSongs = () => {
     const searchText = document.getElementById("search-filed").value;
-    const url = `https://api.lyrics.ovh/suggests/${searchText}`
+    const url = `https://api.lyrics.ovh/suggest/${searchText}`
     // console.log(url);
     fetch(url)
         .then(res => res.json())
