@@ -4,12 +4,20 @@ const searchSongs = () => {
     const searchText = document.getElementById("search-filed").value;
     const url = `https://api.lyrics.ovh/suggest/${searchText}`
     // console.log(url);
+    toggleSpinner(); // For the loading spinner
     fetch(url)
         .then(res => res.json())
         .then(data => displaySongs(data.data))
         // .catch(error => displayError(error));
         .catch(error => displayError("Something Went Wrong!! Please Try Again Later!"));
 }
+// Implement Search Box click on keyboard enter:
+document.getElementById("search-filed")
+.addEventListener('keypress', function(event){
+    if (event.key === 'Enter') {
+        document.getElementById("search-button").click();
+    }
+})
 
 // Step: 02 OR 01
 // const searchSongs = async() => { // For async && await
@@ -42,6 +50,7 @@ const displaySongs = songs => {
             </div>
         `;
         songContainer.appendChild(songDiv);
+        toggleSpinner(); // For the loading spinner
     });
 }
 // ---------------------------------------------------
@@ -49,32 +58,32 @@ const displaySongs = songs => {
 
 // lyrics data loaded:
 // Step: 01 OR 02
-// const getLyric = (artist, title) => {
-//     // console.log(artist, title); // xxx::xxx
-//     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
-//     // console.log(url);
-//     fetch(url)
-//         .then(res => res.json())
-//         .then(data => displayLyrics(data.lyrics))
-//         // .catch(error => displayError(error));
-//         .catch(error => displayError("Something Went Wrong!! Please Try Again Later!"));
-// }
-
-// Step: 02 OR 01
-const getLyric = async (artist, title) => { // For async && await
+const getLyric = (artist, title) => {
     // console.log(artist, title); // xxx::xxx
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
     // console.log(url);
-    try { // try syntax condition
-        const res = await fetch(url); // For async && await
-        const data = await res.json();
-        displayLyrics(data.lyrics);
-    }
-    catch (error) {
-        // displayError(error);
-        displayError("Something Went Wrong!! Please Try Again Later!");
-    }
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayLyrics(data.lyrics))
+        // .catch(error => displayError(error));
+        .catch(error => displayError("Something Went Wrong!! Please Try Again Later!"));
 }
+
+// Step: 02 OR 01
+// const getLyric = async (artist, title) => { // For async && await
+//     // console.log(artist, title); // xxx::xxx
+//     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
+//     // console.log(url);
+//     try { // try syntax condition
+//         const res = await fetch(url); // For async && await
+//         const data = await res.json();
+//         displayLyrics(data.lyrics);
+//     }
+//     catch (error) {
+//         // displayError(error);
+//         displayError("Something Went Wrong!! Please Try Again Later!");
+//     }
+// }
 
 // displayed lyrics text:
 const displayLyrics = lyrics => {
@@ -89,3 +98,10 @@ const displayError = error => {
     errorTag.innerText = error;
 }
 
+// displayed Loading Spinner:
+const toggleSpinner = () => {
+    const spinner = document.getElementById("loading-spinner");
+    const songs = document.getElementById("song-container");
+    spinner.classList.toggle('d-none');
+    songs.classList.toggle('d-none');
+}
